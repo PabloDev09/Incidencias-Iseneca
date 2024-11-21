@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "671699855598",
+    "project_id": "flutterfire-pmg-login",
+    "storage_bucket": "flutterfire-pmg-login.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671699855598:android:b0d81d8acd32d49643abff",
+        "android_client_info": {
+          "package_name": "ies.jandula.loginapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7WkZom2uVNSzcHE-NvsJIUrAMDfRfW2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

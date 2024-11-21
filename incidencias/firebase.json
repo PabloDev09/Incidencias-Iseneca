@@ -1,0 +1,24 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "flutterfire-pmg-login",
+                    "appId": "1:671699855598:android:b0d81d8acd32d49643abff",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "flutterfire-pmg-login",
+                    "configurations": {
+                        "android": "1:671699855598:android:b0d81d8acd32d49643abff",
+                        "ios": "1:671699855598:ios:35c6e424bdc1788943abff",
+                        "macos": "1:671699855598:ios:35c6e424bdc1788943abff",
+                        "web": "1:671699855598:web:b1392f9b7c1d22bb43abff"
+                    }
+                }
+            }
+        }
+    }
+}
