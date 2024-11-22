@@ -108,7 +108,7 @@ class ShowIssuesScreen extends StatelessWidget {
                             // Encabezados de la tabla
                             Container(
                               color: AppTheme(selectedColor: 2).theme().primaryColor,
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding: const EdgeInsets.only(top: 25, bottom: 25),
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -151,7 +151,7 @@ class ShowIssuesScreen extends StatelessWidget {
                                       color: colorFondo
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                      padding: const EdgeInsets.only(top: 50, bottom: 50),
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [

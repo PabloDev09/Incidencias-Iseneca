@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,11 +11,11 @@ class CreateIssueScreen extends StatelessWidget {
   final String name = "createIssueScreen";
   const CreateIssueScreen({super.key});
 
-  String assignDateNow(TextEditingController dateController)
-  {
+  String assignDateNow(TextEditingController dateController) {
     // Formato de la fecha
-    String formattedDate = "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}";
-    // Fijar valor del dia de hoy
+    String formattedDate =
+        "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}";
+    // Fijar valor del día de hoy
     dateController.text = DateTime.now().toString();
     // Formatearlo
     return dateController.text = formattedDate;
@@ -26,13 +25,18 @@ class CreateIssueScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Controladores de texto
     TextEditingController descriptionController = TextEditingController();
-    TextEditingController numClassController = TextEditingController();
     TextEditingController dateController = TextEditingController();
     assignDateNow(dateController);
 
+
+
     // Providers
-    UsersProvider usersProvider = Provider.of<UsersProvider>(context, listen: true);
-    IssuesProvider issuesProvider = Provider.of<IssuesProvider>(context, listen: true);
+    UsersProvider usersProvider =
+        Provider.of<UsersProvider>(context, listen: true);
+    IssuesProvider issuesProvider =
+        Provider.of<IssuesProvider>(context, listen: true);
+
+    String? selectedClassNumber;
 
     // Función para seleccionar la fecha
     Future<void> selectDate(BuildContext context) async {
@@ -44,15 +48,17 @@ class CreateIssueScreen extends StatelessWidget {
       );
 
       if (pickedDate != null) {
-        String formattedDate = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-        dateController.text = formattedDate; // Actualizar el TextFormField con la fecha seleccionada
+        String formattedDate =
+            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+        dateController.text =
+            formattedDate; // Actualizar el TextFormField con la fecha seleccionada
       }
     }
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {}, 
+          onPressed: () {},
           icon: const Icon(Icons.person),
         ),
         centerTitle: true,
@@ -62,8 +68,8 @@ class CreateIssueScreen extends StatelessWidget {
             onPressed: () {
               // Navega hacia la pantalla ShowIssuesScreen
               context.pushNamed(
-                ShowIssuesScreen(user: FirebaseAuth.instance.currentUser).name
-              );
+                  ShowIssuesScreen(user: FirebaseAuth.instance.currentUser)
+                      .name);
             },
             child: const Text('Ver incidencia'),
           ),
@@ -96,7 +102,7 @@ class CreateIssueScreen extends StatelessWidget {
                       ),
                     ],
                   );
-                }
+                },
               );
             },
             icon: const Icon(Icons.logout),
@@ -129,10 +135,19 @@ class CreateIssueScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
-                TextFormField(
-                  controller: numClassController,
+                DropdownButtonFormField<String>(
+                  value: selectedClassNumber,
+                  items: issuesProvider.numClassesList.map((String classNumber) {
+                    return DropdownMenuItem<String>(
+                      value: classNumber,
+                      child: Text(classNumber),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    selectedClassNumber = newValue;
+                  },
                   decoration: const InputDecoration(
-                    hintText: 'Número de clase',
+                    hintText: 'Seleccione número de clase',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -154,7 +169,7 @@ class CreateIssueScreen extends StatelessWidget {
                     border: OutlineInputBorder(),
                     suffixIcon: Icon(Icons.calendar_today),
                   ),
-                  readOnly: true, 
+                  readOnly: true,
                   onTap: () {
                     selectDate(context);
                   },
@@ -164,72 +179,82 @@ class CreateIssueScreen extends StatelessWidget {
                   onPressed: () async {
                     // Contador de pop up saltados
                     int countAlertDialog = 0;
-                    // Si algun campo esta vacio
-                    if(descriptionController.value.text.isEmpty || numClassController.value.text.isEmpty || dateController.value.text.isEmpty)
-                    {
-                      showDialog(context: context, builder: (context) {
+                    // Si algún campo está vacío
+                    if (descriptionController.value.text.isEmpty ||
+                        selectedClassNumber == null ||
+                        dateController.value.text.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
                           return AlertDialog(
-                          title: const Text('Campos vacios'),
-                          content: const Text('No pueden haber campos sin valor'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                context.pop();
-                              },
-                              child: const Text('Aceptar'),
-                            ),
-                          ],
-                        );
-                      },);
-                      countAlertDialog ++;
-                    }
-                    // Si se ha creado correctamente la incidencia
-                    if(await issuesProvider.createIssue(numClassController.value.text, descriptionController.value.text, dateController.value.text.toString(), FirebaseAuth.instance.currentUser!.email!))
-                    {
-                      // ignore: use_build_context_synchronously
-                      showDialog(context: context, builder: (context){
-                          return AlertDialog(
-                          title: const Text('Indicencia creada '),
-                          content: const Text('La indicencia ha sido creada'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                context.pop(); 
-                              },
-                              child: const Text('Aceptar'),
-                            ),
-                          ],
-                        );
-                      },);
+                            title: const Text('Campos vacíos'),
+                            content: const Text('No pueden haber campos sin valor'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  context.pop();
+                                },
+                                child: const Text('Aceptar'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                       countAlertDialog++;
                     }
-                    // Si no ha saltado ninguno de los pop up anteriores
-                    if(countAlertDialog == 0)
-                    {
+                    // Si se ha creado correctamente la incidencia
+                    if (await issuesProvider.createIssue(
+                        selectedClassNumber!,
+                        descriptionController.value.text,
+                        dateController.value.text.toString(),
+                        FirebaseAuth.instance.currentUser!.email!)) {
                       // ignore: use_build_context_synchronously
-                    showDialog(context: context, builder: (context) {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
                           return AlertDialog(
-                          title: const Text('Incidencia no creada'),
-                          content: const Text('La incidencia no se ha podido crear'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                context.pop(); 
-                              },
-                              child: const Text('Aceptar'),
-                            ),
-                          ],
-                        );
-                      },);
-
+                            title: const Text('Incidencia creada'),
+                            content: const Text('La incidencia ha sido creada'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  context.pop();
+                                },
+                                child: const Text('Aceptar'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      countAlertDialog++;
+                      issuesProvider.chargeIssues();
                     }
-                      // Limpiar los formularios de numero de clase y descripcion
-                      numClassController.clear();
-                      descriptionController.clear();
-                      // Asignar el valor de hoy al Formulario de fecha
-                      assignDateNow(dateController);
-                      // Fijar variable de contador de pop up a 0
-                      countAlertDialog = 0;
+                    // Si no ha saltado ninguno de los pop up anteriores
+                    if (countAlertDialog == 0) {
+                      // ignore: use_build_context_synchronously
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Incidencia no creada'),
+                            content: const Text('La incidencia no se ha podido crear'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  context.pop();
+                                },
+                                child: const Text('Aceptar'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                    // Limpiar los formularios
+                    descriptionController.clear();
+                    selectedClassNumber = "Sin valor";
+                    assignDateNow(dateController);
+                    countAlertDialog = 0;
                   },
                   child: const Text('Crear incidencia'),
                 ),

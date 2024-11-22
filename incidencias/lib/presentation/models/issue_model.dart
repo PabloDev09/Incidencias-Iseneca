@@ -21,7 +21,7 @@ String issueModelToJson(List<IssueModel> data) =>
 class IssueModel {
   final String numeroAula;
   final String correoDocente;
-  final int fechaIncidencia;
+  final String fechaIncidencia;
   final String descripcionIncidencia;
   final String estadoIncidencia;
   final String comentario;
@@ -56,7 +56,7 @@ class IssueModel {
   Issue toEntity() => Issue(
         numeroAula: numeroAula,
         correoDocente: correoDocente,
-        fechaIncidencia: DateTime.fromMillisecondsSinceEpoch(fechaIncidencia),
+        fechaIncidencia: DateTime.parse(fechaIncidencia),
         descripcionIncidencia: descripcionIncidencia,
         estadoIncidencia: estadoIncidencia,
         comentario: comentario,

@@ -47,7 +47,7 @@ Future<List<Issue>> postIncidencias() async {
       data: IssueModel(
         numeroAula: numClass,
         correoDocente: mailProfessor, 
-        fechaIncidencia: DateTime.now().millisecondsSinceEpoch, 
+        fechaIncidencia: DateTime.now().millisecondsSinceEpoch.toString(), 
         descripcionIncidencia: description,
         estadoIncidencia: status,
         comentario: '',
